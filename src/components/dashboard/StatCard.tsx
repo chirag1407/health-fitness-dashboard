@@ -50,7 +50,7 @@ export default function StatCard({
         <div className="mt-4">
           <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
             <div
-              className="bg-primary-500 dark:bg-primary-400 h-2 rounded-full"
+              className="bg-green-500 dark:bg-green-400 h-2 rounded-full"
               style={{ width: `${safeProgress * 100}%` }}
             />
           </div>
