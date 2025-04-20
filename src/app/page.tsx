@@ -23,22 +23,43 @@ import {
 } from 'lucide-react';
 import { Activity as ActivityType, Nutrition, WaterIntake, Workout } from '../types';
 import { format, parseISO, startOfMonth, endOfMonth, isToday, isSameMonth, isSameDay } from 'date-fns';
+import { mockUser, getPastWeekDates, generateMockActivities, generateMockNutrition, generateMockWaterIntake, mockWorkouts } from '../data/mock-data';
 
 export default function Home() {
-  const { 
-    user, 
-    activities, 
-    workouts, 
-    nutrition, 
-    currentDate, 
-    dailySummary, 
-    waterIntake
-  } = useHealth();
-
   const { theme, toggleTheme } = useTheme();
 
   // For tab navigation
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  // Client-side mock data state
+  const [activities, setActivities] = useState<ActivityType[]>([]);
+  const [workouts, setWorkouts] = useState<Workout[]>([]); // If you want randomize, do similar
+  const [nutrition, setNutrition] = useState<Nutrition[]>([]);
+  const [waterIntake, setWaterIntake] = useState<WaterIntake[]>([]);
+  const [currentDate, setCurrentDate] = useState('');
+  const [dailySummary, setDailySummary] = useState<any>(null);
+
+  useEffect(() => {
+    // Only run on client
+    const dates = getPastWeekDates();
+    setActivities(generateMockActivities(dates, mockUser));
+    setNutrition(generateMockNutrition(dates, mockUser));
+    setWaterIntake(generateMockWaterIntake(dates, mockUser));
+    setWorkouts(mockWorkouts);
+    setCurrentDate(dates[0]);
+  }, []);
+
+  useEffect(() => {
+    if (activities.length && waterIntake.length) {
+      setDailySummary({
+        date: currentDate,
+        stepsProgress: activities[0].steps / mockUser.dailyStepGoal,
+        calorieProgress: activities[0].caloriesBurned / mockUser.dailyCalorieGoal,
+        waterProgress: waterIntake[0].intake / mockUser.dailyWaterGoal,
+        activeMinutes: activities[0].activeMinutes
+      });
+    }
+  }, [activities, waterIntake, currentDate]);
 
   // Find activity, nutrition data for current date
   const currentActivity = activities.find((a: ActivityType) => a.date === currentDate);
@@ -288,14 +309,14 @@ export default function Home() {
     
     // Form state with a string type for theme preference to include "system"
     const [formData, setFormData] = useState({
-      name: user.name,
-      email: user.email,
-      height: user.height || '',
-      weight: user.weight || '',
-      age: user.age || '',
-      dailyStepGoal: user.dailyStepGoal,
-      dailyCalorieGoal: user.dailyCalorieGoal,
-      dailyWaterGoal: user.dailyWaterGoal,
+      name: mockUser.name,
+      email: mockUser.email,
+      height: mockUser.height || '',
+      weight: mockUser.weight || '',
+      age: mockUser.age || '',
+      dailyStepGoal: mockUser.dailyStepGoal,
+      dailyCalorieGoal: mockUser.dailyCalorieGoal,
+      dailyWaterGoal: mockUser.dailyWaterGoal,
       themePreference: theme === "light" ? "light" : "dark", // String type
       notificationsEnabled: true
     });
@@ -540,9 +561,9 @@ export default function Home() {
         <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
           <div className="flex flex-col items-center">
             <div className="relative w-24 h-24 overflow-hidden bg-gray-200 rounded-full mb-4">
-              {user.avatar ? (
+              {mockUser.avatar ? (
                 <img 
-                  src={user.avatar}
+                  src={mockUser.avatar}
                   alt="User avatar" 
                   className="object-cover w-full h-full"
                 />
@@ -551,8 +572,8 @@ export default function Home() {
               )}
             </div>
             
-            <h2 className="text-xl font-semibold">{user.name}</h2>
-            <p className="text-gray-500 dark:text-gray-400 mb-6">{user.email}</p>
+            <h2 className="text-xl font-semibold">{mockUser.name}</h2>
+            <p className="text-gray-500 dark:text-gray-400 mb-6">{mockUser.email}</p>
             
             <div className="w-full space-y-4 mt-2">
               <div className="flex justify-between items-center">
@@ -587,7 +608,7 @@ export default function Home() {
       <StatCard 
         title="Steps"
         value={currentActivity?.steps || 0}
-        subtitle={`/${user.dailyStepGoal}`}
+        subtitle={`/${mockUser.dailyStepGoal}`}
         icon={Footprints}
         progress={dailySummary?.stepsProgress}
         progressIcon={CalendarCheck}
@@ -611,7 +632,7 @@ export default function Home() {
       <StatCard 
         title="Water"
         value={`${currentWater?.intake || 0} ml`}
-        subtitle={`/${user.dailyWaterGoal} ml`}
+        subtitle={`/${mockUser.dailyWaterGoal} ml`}
         icon={Droplets}
         progress={dailySummary?.waterProgress}
         progressIcon={Droplets}

@@ -5,6 +5,7 @@ import { Nutrition } from '@/types';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Utensils } from 'lucide-react';
+import type { TooltipItem } from 'chart.js';
 
 // Register ChartJS components
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -78,7 +79,7 @@ export default function NutritionSummary({ nutritionData }: NutritionSummaryProp
       },
       tooltip: {
         callbacks: {
-          label: function(context: any) {
+          label: function(context: TooltipItem<'doughnut'>) {
             const label = context.label || '';
             const value = context.raw || 0;
             return `${label}: ${value}g`;

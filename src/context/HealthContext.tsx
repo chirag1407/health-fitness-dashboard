@@ -16,11 +16,10 @@ import {
 // Import mock data
 import { 
   mockUser, 
-  mockActivities, 
-  mockWorkouts, 
-  mockNutrition, 
-  mockWaterIntake,
-  mockDailySummary 
+  getPastWeekDates, 
+  generateMockActivities, 
+  generateMockNutrition, 
+  generateMockWaterIntake 
 } from '@/data/mock-data';
 
 // Define context type
@@ -40,15 +39,34 @@ const HealthContext = createContext<HealthContextType | undefined>(undefined);
 
 // Provider component
 export function HealthProvider({ children }: { children: ReactNode }) {
-  const [currentDate, setCurrentDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
-  
-  // In a real app, these would be fetched from an API
+  // Generate all mock data on the client to avoid hydration errors
+  const [currentDate, setCurrentDate] = useState<string>('');
   const [user] = useState<User>(mockUser);
-  const [activities] = useState<Activity[]>(mockActivities);
-  const [workouts] = useState<Workout[]>(mockWorkouts);
-  const [nutrition] = useState<Nutrition[]>(mockNutrition);
-  const [waterIntake] = useState<WaterIntake[]>(mockWaterIntake);
-  const [dailySummary] = useState<DailySummary>(mockDailySummary);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [workouts] = useState<Workout[]>([]); // If you want randomize, do similar
+  const [nutrition, setNutrition] = useState<Nutrition[]>([]);
+  const [waterIntake, setWaterIntake] = useState<WaterIntake[]>([]);
+  const [dailySummary, setDailySummary] = useState<DailySummary | null>(null);
+
+  React.useEffect(() => {
+    const dates = getPastWeekDates();
+    setActivities(generateMockActivities(dates, mockUser));
+    setNutrition(generateMockNutrition(dates, mockUser));
+    setWaterIntake(generateMockWaterIntake(dates, mockUser));
+    setCurrentDate(dates[0]);
+  }, []);
+
+  React.useEffect(() => {
+    if (activities.length && waterIntake.length) {
+      setDailySummary({
+        date: currentDate,
+        stepsProgress: activities[0].steps / mockUser.dailyStepGoal,
+        calorieProgress: activities[0].caloriesBurned / mockUser.dailyCalorieGoal,
+        waterProgress: waterIntake[0].intake / mockUser.dailyWaterGoal,
+        activeMinutes: activities[0].activeMinutes
+      });
+    }
+  }, [activities, waterIntake, currentDate]);
 
   return (
     <HealthContext.Provider
@@ -58,7 +76,7 @@ export function HealthProvider({ children }: { children: ReactNode }) {
         workouts,
         nutrition,
         waterIntake,
-        dailySummary,
+        dailySummary: dailySummary as DailySummary, // fallback for null
         currentDate,
         setCurrentDate,
       }}

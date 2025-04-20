@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useHealth } from '../../context/HealthContext';
 import { format } from 'date-fns';
 import { 
@@ -13,7 +13,8 @@ import {
   Menu,
   X
 } from 'lucide-react';
-import { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface LayoutProps {
@@ -24,6 +25,11 @@ interface LayoutProps {
 export default function Layout({ children, activeTab = 'dashboard' }: LayoutProps) {
   const { user } = useHealth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [currentDate, setCurrentDate] = useState('');
+
+  useEffect(() => {
+    setCurrentDate(format(new Date(), 'EEEE, MMMM d, yyyy'));
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -45,16 +51,16 @@ export default function Layout({ children, activeTab = 'dashboard' }: LayoutProp
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
       >
         <div className="flex items-center justify-between flex-shrink-0 p-4">
-          <a href="/" className="text-xl font-semibold text-primary">
+          <Link href="/" className="text-xl font-semibold text-primary">
             HealthTrack
-          </a>
+          </Link>
         </div>
 
         <nav className="flex-1 overflow-auto p-4">
           <ul className="space-y-2">
             <li>
               <a 
-                href="/" 
+                href="#dashboard" 
                 className={`flex items-center px-4 py-3 rounded-lg ${
                   activeTab === 'dashboard' 
                     ? 'text-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-200' 
@@ -67,7 +73,7 @@ export default function Layout({ children, activeTab = 'dashboard' }: LayoutProp
             </li>
             <li>
               <a 
-                href="/#activities" 
+                href="#activities" 
                 className={`flex items-center px-4 py-3 rounded-lg ${
                   activeTab === 'activities' 
                     ? 'text-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-200' 
@@ -80,7 +86,7 @@ export default function Layout({ children, activeTab = 'dashboard' }: LayoutProp
             </li>
             <li>
               <a 
-                href="/#nutrition" 
+                href="#nutrition" 
                 className={`flex items-center px-4 py-3 rounded-lg ${
                   activeTab === 'nutrition' 
                     ? 'text-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-200' 
@@ -93,7 +99,7 @@ export default function Layout({ children, activeTab = 'dashboard' }: LayoutProp
             </li>
             <li>
               <a 
-                href="/#calendar" 
+                href="#calendar" 
                 className={`flex items-center px-4 py-3 rounded-lg ${
                   activeTab === 'calendar' 
                     ? 'text-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-200' 
@@ -106,7 +112,7 @@ export default function Layout({ children, activeTab = 'dashboard' }: LayoutProp
             </li>
             <li>
               <a 
-                href="/#settings" 
+                href="#settings" 
                 className={`flex items-center px-4 py-3 rounded-lg ${
                   activeTab === 'settings' 
                     ? 'text-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-200' 
@@ -124,10 +130,12 @@ export default function Layout({ children, activeTab = 'dashboard' }: LayoutProp
           <div className="flex items-center space-x-4">
             <div className="relative w-10 h-10 overflow-hidden bg-gray-200 rounded-full">
               {user.avatar ? (
-                <img 
+                <Image 
                   src={user.avatar.startsWith('/') ? user.avatar : `/${user.avatar}`} 
                   alt="User avatar" 
                   className="object-cover w-full h-full"
+                  width={40}
+                  height={40}
                   onError={(e) => {
                     // Fallback to placeholder if image fails to load
                     const target = e.target as HTMLImageElement;
@@ -160,7 +168,7 @@ export default function Layout({ children, activeTab = 'dashboard' }: LayoutProp
           <div className="flex items-center gap-4">
             <ThemeToggle />
             <div className="text-sm text-gray-600 dark:text-gray-400">
-              {format(new Date(), 'EEEE, MMMM d, yyyy')}
+              {currentDate}
             </div>
           </div>
         </header>
@@ -172,4 +180,3 @@ export default function Layout({ children, activeTab = 'dashboard' }: LayoutProp
     </div>
   );
 }
- 
