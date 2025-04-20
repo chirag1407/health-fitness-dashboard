@@ -120,7 +120,7 @@ export default function NutritionSummary({ nutritionData }: NutritionSummaryProp
         {/* Meals list */}
         <div className="w-full md:w-1/2 mt-4 md:mt-0 md:pl-6">
           <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Today's Meals
+            Today&apos;s Meals
           </h4>
           <div className="space-y-3 max-h-56 overflow-y-auto pr-2">
             {nutritionData.meals.map((meal) => (

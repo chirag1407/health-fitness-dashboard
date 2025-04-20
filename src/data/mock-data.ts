@@ -3,8 +3,7 @@ import {
   Activity, 
   Workout, 
   Nutrition, 
-  WaterIntake,
-  DailySummary 
+  WaterIntake
 } from '@/types';
 import { format, subDays } from 'date-fns';
 

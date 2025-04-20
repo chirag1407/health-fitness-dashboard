@@ -1,7 +1,6 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { format } from 'date-fns';
 
 // Import types
 import { 

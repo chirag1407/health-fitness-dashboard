@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useHealth } from '../context/HealthContext';
 import { useTheme } from '../context/ThemeContext';
 import Layout from '../components/layout/Layout';
 import StatCard from '../components/dashboard/StatCard';
@@ -13,21 +12,16 @@ import {
   Timer,
   Flame, 
   Droplets,
-  Check,
-  X,
-  CalendarDays,
   CalendarCheck,
   Footprints,
-  Activity,
-  Dumbbell
+  Activity
 } from 'lucide-react';
 import { Activity as ActivityType, Nutrition, WaterIntake, Workout } from '../types';
-import { format, parseISO, startOfMonth, endOfMonth, isToday, isSameMonth, isSameDay } from 'date-fns';
+import { format, startOfMonth, endOfMonth, isToday, isSameDay } from 'date-fns';
 import { mockUser, getPastWeekDates, generateMockActivities, generateMockNutrition, generateMockWaterIntake, mockWorkouts } from '../data/mock-data';
+import Image from 'next/image';
 
 export default function Home() {
-  const { theme, toggleTheme } = useTheme();
-
   // For tab navigation
   const [activeTab, setActiveTab] = useState('dashboard');
 
@@ -305,8 +299,6 @@ export default function Home() {
 
   // Settings section implementation
   const SettingsSection = () => {
-    const { theme, toggleTheme } = useTheme();
-    
     // Form state with a string type for theme preference to include "system"
     const [formData, setFormData] = useState({
       name: mockUser.name,
@@ -317,7 +309,7 @@ export default function Home() {
       dailyStepGoal: mockUser.dailyStepGoal,
       dailyCalorieGoal: mockUser.dailyCalorieGoal,
       dailyWaterGoal: mockUser.dailyWaterGoal,
-      themePreference: theme === "light" ? "light" : "dark", // String type
+      themePreference: "dark", // String type
       notificationsEnabled: true
     });
     
@@ -325,32 +317,13 @@ export default function Home() {
     useEffect(() => {
       setFormData(prev => ({ 
         ...prev, 
-        themePreference: theme === "light" ? "light" : "dark" 
+        themePreference: "dark" 
       }));
-    }, [theme]);
+    }, []);
     
     // Handle form input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value, type, checked } = e.target;
-      
-      // Special handling for theme changes
-      if (name === 'themePreference') {
-        // For "system" option, always use dark theme
-        if (value === 'system') {
-          // If we're not already in dark mode, toggle to dark
-          if (theme === 'light') {
-            toggleTheme();
-          }
-        } 
-        // For light/dark options
-        else if (value === 'light' && theme === 'dark') {
-          toggleTheme();
-        } else if (value === 'dark' && theme === 'light') {
-          toggleTheme();
-        }
-      }
-      
-      // Update all form fields
       setFormData(prev => ({
         ...prev,
         [name]: type === 'checkbox' ? checked : value
@@ -562,10 +535,11 @@ export default function Home() {
           <div className="flex flex-col items-center">
             <div className="relative w-24 h-24 overflow-hidden bg-gray-200 rounded-full mb-4">
               {mockUser.avatar ? (
-                <img 
+                <Image 
                   src={mockUser.avatar}
                   alt="User avatar" 
                   className="object-cover w-full h-full"
+                  fill
                 />
               ) : (
                 <User className="absolute w-14 h-14 text-gray-400 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" />
