@@ -5,14 +5,17 @@ import {
   Nutrition, 
   WaterIntake
 } from '@/types';
-import { format, subDays } from 'date-fns';
+import { format } from 'date-fns';
 
 // Recent workouts
+const today = new Date();
+const yyyy = today.getFullYear();
+const mm = String(today.getMonth() + 1).padStart(2, '0');
 export const mockWorkouts: Workout[] = [
   {
     id: 'workout-1',
     userId: 'user-1',
-    date: '2023-10-01',
+    date: `${yyyy}-${mm}-01`,
     title: 'Morning Run',
     type: 'running',
     duration: 35,
@@ -22,7 +25,7 @@ export const mockWorkouts: Workout[] = [
   {
     id: 'workout-2',
     userId: 'user-1',
-    date: '2023-10-02',
+    date: `${yyyy}-${mm}-02`,
     title: 'Strength Training',
     type: 'strength',
     duration: 45,
@@ -32,7 +35,7 @@ export const mockWorkouts: Workout[] = [
   {
     id: 'workout-3',
     userId: 'user-1',
-    date: '2023-10-03',
+    date: `${yyyy}-${mm}-03`,
     title: 'Yoga Session',
     type: 'yoga',
     duration: 60,
@@ -42,13 +45,44 @@ export const mockWorkouts: Workout[] = [
   {
     id: 'workout-4',
     userId: 'user-1',
-    date: '2023-10-04',
+    date: `${yyyy}-${mm}-04`,
     title: 'Cycling',
     type: 'cycling',
     duration: 50,
     caloriesBurned: 430,
     description: 'Bike ride on the trail'
-  }
+  },
+  // Upcoming workouts
+  {
+    id: 'workout-5',
+    userId: 'user-1',
+    date: `${yyyy}-${mm}-21`,
+    title: 'HIIT Session',
+    type: 'hiit',
+    duration: 30,
+    caloriesBurned: 350,
+    description: 'High intensity interval training'
+  },
+  {
+    id: 'workout-6',
+    userId: 'user-1',
+    date: `${yyyy}-${mm}-22`,
+    title: 'Evening Walk',
+    type: 'walking',
+    duration: 40,
+    caloriesBurned: 180,
+    description: 'Relaxed walk in the park'
+  },
+  {
+    id: 'workout-7',
+    userId: 'user-1',
+    date: `${yyyy}-${mm}-23`,
+    title: 'Yoga Session',
+    type: 'other',
+    duration: 50,
+    caloriesBurned: 220,
+    description: 'Group fitness class at the gym'
+  },
 ];
 
 // Nutrition data for the past week
@@ -131,7 +165,7 @@ export const mockUser: User = {
   id: 'user-1',
   name: 'Test User',
   email: 'testUser@example.com',
-  avatar: 'https://randomuser.me/api/portraits/men/44.jpg',
+  avatar: '/avatars/user1.jpg',
   height: 165,
   weight: 62,
   age: 28,
@@ -140,6 +174,12 @@ export const mockUser: User = {
   dailyWaterGoal: 2500
 };
 
+function subDays(date: Date, days: number): Date {
+  const result = new Date(date);
+  result.setDate(result.getDate() - days);
+  return result;
+}
+
 // Helper to generate dates for the past week (should be called on client)
 export function getPastWeekDates(): string[] {
   const today = new Date();
@@ -147,3 +187,4 @@ export function getPastWeekDates(): string[] {
     format(subDays(today, i), 'yyyy-MM-dd')
   );
 }
+

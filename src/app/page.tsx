@@ -19,6 +19,7 @@ import { Activity as ActivityType, Nutrition, WaterIntake, Workout } from '../ty
 import { format, startOfMonth, endOfMonth, isToday, isSameDay } from 'date-fns';
 import { mockUser, getPastWeekDates, generateMockActivities, generateMockNutrition, generateMockWaterIntake, mockWorkouts } from '../data/mock-data';
 import Image from 'next/image';
+import { useTheme } from "@/context/ThemeContext";
 
 export default function Home() {
   // For tab navigation
@@ -317,15 +318,16 @@ export default function Home() {
       themePreference: "dark", // String type
       notificationsEnabled: true
     });
-    
+    const { theme, setTheme } = useTheme();
+
     // Update local state when theme changes
     useEffect(() => {
       setFormData(prev => ({ 
         ...prev, 
-        themePreference: "dark" 
+        themePreference: theme 
       }));
-    }, []);
-    
+    }, [theme]);
+
     // Handle form input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value, type, checked } = e.target;
@@ -333,6 +335,9 @@ export default function Home() {
         ...prev,
         [name]: type === 'checkbox' ? checked : value
       }));
+      if (name === 'themePreference' && (value === 'light' || value === 'dark')) {
+        setTheme(value as 'light' | 'dark');
+      }
     };
     
     // Handle form submission
