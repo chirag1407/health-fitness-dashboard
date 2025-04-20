@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useTheme } from '../context/ThemeContext';
 import Layout from '../components/layout/Layout';
 import StatCard from '../components/dashboard/StatCard';
 import ActivityChart from '../components/charts/ActivityChart';
@@ -31,7 +30,13 @@ export default function Home() {
   const [nutrition, setNutrition] = useState<Nutrition[]>([]);
   const [waterIntake, setWaterIntake] = useState<WaterIntake[]>([]);
   const [currentDate, setCurrentDate] = useState('');
-  const [dailySummary, setDailySummary] = useState<any>(null);
+  const [dailySummary, setDailySummary] = useState<{
+    date: string;
+    stepsProgress: number;
+    calorieProgress: number;
+    waterProgress: number;
+    activeMinutes: number;
+} | null>(null);
 
   useEffect(() => {
     // Only run on client
