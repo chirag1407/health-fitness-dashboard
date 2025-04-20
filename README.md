@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Health & Fitness Dashboard
+
+A modern, responsive health and fitness tracking dashboard built with Next.js, TypeScript, and TailwindCSS.
+
+![Health & Fitness Dashboard](https://example.com/dashboard-preview.png)
+
+## Features
+
+- 📊 Interactive charts and statistics for health metrics
+- 🏋️ Workout tracking and history
+- 🍎 Nutrition and meal tracking
+- 💧 Water intake monitoring
+- 📱 Fully responsive design for all devices
+
+## Tech Stack
+
+- [Next.js 15](https://nextjs.org/) - React framework
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [TailwindCSS](https://tailwindcss.com/) - Styling
+- [Recharts](https://recharts.org/) - Data visualization
+- [Chart.js](https://www.chartjs.org/) - Data visualization
+- [Lucide Icons](https://lucide.dev/) - Modern icon set
+- [date-fns](https://date-fns.org/) - Date manipulation
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ and npm/yarn
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/health-fitness-dashboard.git
+cd health-fitness-dashboard
+```
+
+2. Install dependencies
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Run the development server
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+├── public/             # Static assets
+├── src/
+│   ├── app/            # Next.js App Router
+│   ├── components/     # UI Components
+│   │   ├── charts/     # Chart components
+│   │   ├── dashboard/  # Dashboard-specific components
+│   │   ├── layout/     # Layout components
+│   │   └── ui/         # Reusable UI components
+│   ├── context/        # React Context providers
+│   ├── data/           # Mock data (replace with API)
+│   ├── hooks/          # Custom React hooks
+│   ├── lib/            # Utility functions
+│   └── types/          # TypeScript type definitions
+└── tailwind.config.js  # TailwindCSS configuration
+```
 
-## Learn More
+## Customization
 
-To learn more about Next.js, take a look at the following resources:
+### Adding Your Own Data
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Currently, the dashboard uses mock data located in `src/data/mock-data.ts`. To connect to a real API:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Create API service functions in `src/lib/api.ts`
+2. Update the HealthContext to fetch data from your API
+3. Implement authentication if needed
 
-## Deploy on Vercel
+### Theme Customization
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The project uses TailwindCSS for styling. You can customize colors, spacing, and other design tokens in `tailwind.config.js`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+This project is available under the MIT License.
+
+## Acknowledgements
+
+- Design inspired by modern health and fitness applications
+- Icons provided by [Lucide Icons](https://lucide.dev/)
